@@ -10,12 +10,14 @@ app.get("/", function (req, res) {
       res.redirect("/index.html");
 });
 
-app.get("/eval", function (req, res) {
+
+var addCallback = function (req, res) {
     console.log(req.query);
     var result  = 0
 
     res.send(result.toString()); // send response body
-});
+}
+app.get("/add", addCallback);
 
 app.use(methodOverride());
 app.use(bodyParser());
