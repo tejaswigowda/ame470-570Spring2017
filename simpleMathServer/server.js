@@ -13,7 +13,7 @@ app.get("/", function (req, res) {
 
 var addCallback = function (req, res) {
     console.log(req.query);
-    var result  = 0
+    var result  = req.query.a + req.query.b;
 
     res.send(result.toString()); // send response body
 }
