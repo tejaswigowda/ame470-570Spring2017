@@ -19,6 +19,33 @@ var addCallback = function (req, res) {
     res.send(result.toString()); // send response body
 }
 
+
+var subCallback = function (req, res) {
+    var a = parseFloat(req.query.a);
+    var b = parseFloat(req.query.b);
+    var result  = a - b;
+
+    res.send(result.toString()); // send response body
+}
+
+
+var multCallback = function (req, res) {
+    var a = parseFloat(req.query.a);
+    var b = parseFloat(req.query.b);
+    var result  = a * b;
+
+    res.send(result.toString()); // send response body
+}
+
+
+var divCallback = function (req, res) {
+    var a = parseFloat(req.query.a);
+    var b = parseFloat(req.query.b);
+    var result  = a / b;
+
+    res.send(result.toString()); // send response body
+}
+
 app.get("/add", addCallback);
 app.get("/sub", subCallback);
 app.get("/mult", multCallback);
