@@ -10,7 +10,18 @@
 
       var url = "./addTodo" + "?id=" + id + "&todo=" + todo;
       console.log(url);
-      loadFile(url ,function(d){alert(d)})
+      loadFile(url ,function(d){
+        formatTodos(JSON.parse(d));
+      })
+    }
+
+    function formatTodos(list)
+    {
+      var markup = "";
+      for(var i = 0; i < list.length; i++){
+        markup += "<li>" + list[i].todo + "</li>"; 
+      }
+      document.getElementById("todoListWrapper").innerHTML = markup;
     }
   </script>
 </head>
@@ -18,7 +29,7 @@
 <body>
   <h1> Todos </h1>
   <button onclick='addNew()'> Add </button>
-  <div id='todoListWrapper'> </div>
+  <ol id='todoListWrapper'> </ol>
 </body>
 
 </html>
