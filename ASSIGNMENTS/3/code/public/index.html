@@ -1,0 +1,25 @@
+<html>
+
+<head>
+  <script src='asyncReq.js'> </script>
+
+  <script>
+    function calc(){
+      var a = document.getElementById("valA").value;
+
+      var url = "./eval?a=" + a;
+      loadFile(url ,function(d){alert(d)})
+    }
+  </script>
+</head>
+
+<body>
+
+  <textarea id='valA'>
+  </textarea>
+    <br>
+  <button onclick='calc()'> Calculate </button>
+
+</body>
+
+</html>
