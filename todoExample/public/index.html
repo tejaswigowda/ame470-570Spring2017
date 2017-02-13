@@ -13,6 +13,16 @@
       })
     }
 
+    function deleteTodo(index){
+      var flag = confirm("Are you sure you want to delete?");
+
+      var url = "./deleteTodo" + "?index=" + index;
+      loadFile(url ,function(d){
+        formatTodos(JSON.parse(d));
+      })
+    }
+
+
     function formatTodos(list)
     {
       var markup = "";

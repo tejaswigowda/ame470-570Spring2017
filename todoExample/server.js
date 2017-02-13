@@ -22,7 +22,10 @@ app.get("/addTodo", function (req, res) {
 
 
 app.get("/deleteTodo", function (req, res) {
-    var index = req.query.index;
+    var index = parseInt(req.query.index);
+    todoList.splice(index,1);
+
+
     res.send(JSON.stringify(todoList));
 });
 
