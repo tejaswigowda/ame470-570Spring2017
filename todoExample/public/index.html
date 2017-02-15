@@ -34,7 +34,7 @@
       else{
         for(var i = 0; i < list.length; i++){
           markup += "<li>" + list[i].todo +
-            "<button onclick='deleteTodo(" + i + ")'> X </button>"+
+            "<button class='delButton' onclick='deleteTodo(" + i + ")'> X </button>"+
             "</li>"; 
         }
       }
@@ -49,11 +49,27 @@
       })
     }
   </script>
+  <style>
+      h1{
+        text-align: center;
+      }
+      #addButton
+      {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      .delButton
+      {
+          float: right;
+      }      
+
+  </style>
 </head>
 
 <body onload='start()'>
   <h1> Todos </h1>
-  <button onclick='addNew()'> Add </button>
+  <button id='addButton' onclick='addNew()'> Add </button>
   <ol id='todoListWrapper'> </ol>
 </body>
 
