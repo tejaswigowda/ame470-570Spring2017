@@ -10,7 +10,7 @@
       var url = "./addTodo" + "?id=" + id + "&todo=" + todo;
       loadFile(url ,function(d){
         formatTodos(JSON.parse(d));
-      })
+      });
     }
 
     function deleteTodo(index){

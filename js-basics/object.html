@@ -2,6 +2,21 @@
 <html>
 <head>
   <script>
+}
+var doAdd = function(a, b, foo){
+  foo(a + b);
+}
+
+doAdd(3,5, function(d){
+  alert(d);
+});
+
+
+
+
+    function(){
+      alert("here");
+    }();
     var ame470 = {
       term : 'spring 2017',
       location: 'Stauffer',
@@ -10,6 +25,9 @@
         var term = 10
         console.log(term)
         console.log(ame470.term)
+        var x = "term";
+        console.log(ame470[x]);
+        console.log(ame470["term"])
         return ame470.term;
       },
       getScore: function(){
