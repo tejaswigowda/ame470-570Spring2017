@@ -17,7 +17,7 @@
       var flag = confirm("Are you sure you want to delete?");
 
       if(flag){
-        var url = "./deleteTodo" + "?index=" + index;
+        var url = "./deleteTodo" + "?id=" + index;
         loadFile(url ,function(d){
           formatTodos(JSON.parse(d));
         });
@@ -34,7 +34,7 @@
       else{
         for(var i = 0; i < list.length; i++){
           markup += "<li>" + list[i].todo +
-            "<button class='delButton' onclick='deleteTodo(" + i + ")'> X </button>"+
+            "<button class='delButton' onclick='deleteTodo(" + list[i].id + ")'> X </button>"+
             "</li>"; 
         }
       }
