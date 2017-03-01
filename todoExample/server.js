@@ -34,8 +34,11 @@ app.get("/addTodo", function (req, res) {
 
 
 app.get("/deleteTodo", function (req, res) {
-    var id = req.query.id.toString();
+   //var id = parseInt(req.query.id);
+   var id = req.query.id.toString();
+   console.log(id);
    db.collection("data").remove({id: id}, function(err, result){
+     console.log(err);
       if(err){
         res.send("error"); 
       }
@@ -45,8 +48,8 @@ app.get("/deleteTodo", function (req, res) {
         });
       }
    });
-   // todoList.splice(index,1);
    // res.send(JSON.stringify(todoList));
+   // todoList.splice(index,1);
 });
 
 app.get("/getTodos", function (req, res) {
