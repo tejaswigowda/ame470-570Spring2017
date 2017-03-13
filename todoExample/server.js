@@ -1,5 +1,5 @@
 var express = require("express");
-var app = express();
+var server = express();
 var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
 var methodOverride = require('method-override');
@@ -8,7 +8,7 @@ var port = 8080;
 
 var db = require('mongoskin').db('mongodb://user:pwd@127.0.0.1:27017/tododb');
 
-app.get("/", function (req, res) {
+server.get("/", function (req, res) {
       res.redirect("/index.html");
 });
 
@@ -17,7 +17,7 @@ var todoList = [];
 
 
 
-app.get("/addTodo", function (req, res) {
+server.get("/addTodo", function (req, res) {
   db.collection("data").insert(req.query, function(err, result){
       if(err){
         res.send("error"); 
@@ -33,7 +33,7 @@ app.get("/addTodo", function (req, res) {
 });
 
 
-app.get("/deleteTodo", function (req, res) {
+server.get("/deleteTodo", function (req, res) {
    //var id = parseInt(req.query.id);
    var id = req.query.id.toString();
    console.log(id);
@@ -52,7 +52,7 @@ app.get("/deleteTodo", function (req, res) {
    // todoList.splice(index,1);
 });
 
-app.get("/getTodos", function (req, res) {
+server.get("/getTodos", function (req, res) {
   db.collection("data").find({}).toArray( function(err, result) {
     res.send(JSON.stringify(result));
   });
@@ -60,10 +60,10 @@ app.get("/getTodos", function (req, res) {
    // res.send(JSON.stringify(todoList));
 });
 
-app.use(methodOverride());
-app.use(bodyParser());
-app.use(express.static(__dirname + '/public'));
-app.use(errorHandler());
+server.use(methodOverride());
+server.use(bodyParser());
+server.use(express.static(__dirname + '/public'));
+server.use(errorHandler());
 
 console.log("Simple static server listening at http://" + hostname + ":" + port);
-app.listen(port);
+server.listen(port);

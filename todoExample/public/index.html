@@ -45,6 +45,7 @@
     {
       var url = "./getTodos";
       loadFile(url ,function(d){
+        console.log(d);
         formatTodos(JSON.parse(d));
       })
     }
