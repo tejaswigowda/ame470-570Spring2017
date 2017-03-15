@@ -20,9 +20,11 @@ then my submission URL would be **http://12.56.134.53/index.html**
 On lightsail:
 
 $ ```sudo apt-get install mongodb```
+
 $ ```mongo```
 
 > ```use tododb```
+
 > ```db.addUser( { user:'user', pwd:'pwd', roles:['dbAdmin','readWrite'] } )```
  
 
