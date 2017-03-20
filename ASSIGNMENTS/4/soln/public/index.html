@@ -2,6 +2,7 @@
 <html>
 <head>
   <script src='asyncReq.js'> </script>
+  <script src='https://code.jquery.com/jquery-3.2.0.min.js'> </script>
   <script>
     function addNew(){
       var imageURL = prompt("Enter New Image URL:");
@@ -12,6 +13,11 @@
           formatTodos(JSON.parse(d));
         });
       }
+    }
+
+    function deleteImage()
+    {
+       deleteTodo(currSel);
     }
 
     function deleteTodo(index){
@@ -31,19 +37,23 @@
       var markup = "";
       if(list.length == 0){
         markup = "No images yet"
+        document.getElementById("todoListWrapper").innerHTML = markup;
+        return;
       }
-      else{
-        for(var i = 0; i < list.length; i++){
-          markup += "<li> <a href='javascript:imageSelected(" + list[i].id + ")'>" + list[i].name +
+      for(var i = 0; i < list.length; i++){
+        markup += "<li> <a href='javascript:imageSelected(" + list[i].id + "," + (i+1) + ")'>" + list[i].name +
             "</a></li>"; 
-        }
       }
       document.getElementById("todoListWrapper").innerHTML = markup;
+      imageSelected(list[0].id);
     }
 
     var currSel = 0;
-    function imageSelected(id){
+    function imageSelected(id, index){
         currSel = id;
+        $("#todoListWrapper li a").removeClass("selected");
+        $("#todoListWrapper li:nth-of-type(" + index + ") a").addClass("selected");
+
         var url = "./getTodo?id=" + id;
         loadFile(url ,function(d){
           var data = JSON.parse(d);
@@ -62,6 +72,10 @@
     }
   </script>
   <style>
+      .selected{
+        color: red;
+        text-transform: uppercase;
+      }
       h1{
         text-align: center;
       }
