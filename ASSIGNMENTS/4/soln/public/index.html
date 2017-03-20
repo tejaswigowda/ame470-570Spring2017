@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+  <script src='asyncReq.js'> </script>
+  <script>
+    function addNew(){
+      var imageURL = prompt("Enter New Image URL:");
+      var id = new Date().getTime();
+      if(imageURL.indexOf("http") >=0 && imageURL.length > 10){
+        var url = "./addTodo" + "?id=" + id + "&url=" + imageURL + "&name=Untitled";
+        loadFile(url ,function(d){
+          formatTodos(JSON.parse(d));
+        });
+      }
+    }
+
+    function deleteTodo(index){
+      var flag = confirm("Are you sure you want to delete?");
+
+      if(flag){
+        var url = "./deleteTodo" + "?id=" + index;
+        loadFile(url ,function(d){
+          formatTodos(JSON.parse(d));
+        });
+      }
+    }
+
+
+    function formatTodos(list)
+    {
+      var markup = "";
+      if(list.length == 0){
+        markup = "No images yet"
+      }
+      else{
+        for(var i = 0; i < list.length; i++){
+          markup += "<li>" + list[i].name +
+           // "<button class='delButton' onclick='deleteTodo(" + list[i].id + ")'> X </button>"+
+            "</li>"; 
+        }
+      }
+      document.getElementById("todoListWrapper").innerHTML = markup;
+    }
+
+    function start()
+    {
+      var url = "./getTodos";
+      loadFile(url ,function(d){
+        console.log(d);
+        formatTodos(JSON.parse(d));
+      })
+    }
+  </script>
+  <style>
+      h1{
+        text-align: center;
+      }
+      #addButton
+      {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      .delButton
+      {
+          float: right;
+      }      
+      #theImage{
+        height: 200px;
+        width: 100%;
+        background-size: contain;
+        background-position: 50%;
+        background-repeat: no-repeat;
+      }
+
+  </style>
+</head>
+
+<body onload='start()'>
+  <h1> Todos </h1>
+  <button id='addButton' onclick='addNew()'> Add </button>
+  <ol id='todoListWrapper'> </ol>
+  <div id='theDetails'> 
+    <h1 id='theTitle'></h1>
+    <div id='theImage'></div>
+
+    <button onclick='deleteImage()'> Delete </button>
+    <button onclick='renameImage()'> Rename </button>
+
+  </div>
+</body>
+
+</html>
