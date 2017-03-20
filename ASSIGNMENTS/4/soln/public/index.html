@@ -42,8 +42,14 @@
     }
 
     var currSel = 0;
-    function imageSelected(index){
-        currSel = index;
+    function imageSelected(id){
+        currSel = id;
+        var url = "./getTodo?id=" + id;
+        loadFile(url ,function(d){
+          var data = JSON.parse(d);
+          document.getElementById("theTitle").innerHTML = data.name;
+          document.getElementById("theImage").style.backgroundImage = "url(" + data.url + ")";
+        });
     }
 
     function start()
