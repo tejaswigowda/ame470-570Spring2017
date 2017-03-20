@@ -56,8 +56,13 @@ server.get("/getTodos", function (req, res) {
   db.collection("data").find({}).toArray( function(err, result) {
     res.send(JSON.stringify(result));
   });
+});
 
-   // res.send(JSON.stringify(todoList));
+server.get("/getTodo", function (req, res) {
+  var id = req.query.id.toString();
+  db.collection("data").findOne({id:id}, function(err, result) {
+    res.send(JSON.stringify(result));
+  });
 });
 
 server.use(methodOverride());

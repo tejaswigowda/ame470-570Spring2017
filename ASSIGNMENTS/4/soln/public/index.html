@@ -34,12 +34,16 @@
       }
       else{
         for(var i = 0; i < list.length; i++){
-          markup += "<li>" + list[i].name +
-           // "<button class='delButton' onclick='deleteTodo(" + list[i].id + ")'> X </button>"+
-            "</li>"; 
+          markup += "<li> <a href='javascript:imageSelected(" + list[i].id + ")'>" + list[i].name +
+            "</a></li>"; 
         }
       }
       document.getElementById("todoListWrapper").innerHTML = markup;
+    }
+
+    var currSel = 0;
+    function imageSelected(index){
+        currSel = index;
     }
 
     function start()
