@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body, html{
+  padding: 0px;
+  margin: 0px;
+}
+.col{
+  background-color: lightgreen;
+  height: 200px;
+  margin-top: 10px;
+  box-shadow: 0px 0px 10px;
+}
+
+@media (max-width: 400px) {
+  .col{
+    width: 90%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+}
+
+
+@media (min-width: 400px) and (max-width: 800px) {
+  .col{
+    width: 45%;
+    padding-left: 2%;
+    padding-right: 2%;
+    display: inline-block;
+  }
+}
+
+
+@media (min-width: 800px) {
+  .col{
+    width: 30%;
+    padding-left: 1%;
+    padding-right: 1%;
+    display: inline-block;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class='col'></div>
+<div class='col'></div>
+<div class='col'></div>
+<div class='col'></div>
+<div class='col'></div>
+<div class='col'></div>
+<div class='col'></div>
+<div class='col'></div>
+
+</body>
+</html>
+
