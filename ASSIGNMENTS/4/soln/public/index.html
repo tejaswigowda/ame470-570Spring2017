@@ -86,6 +86,12 @@
         top: 20px;
         right: 20px;
       }
+      #uploadButton
+      {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
       .delButton
       {
           float: right;
@@ -103,7 +109,8 @@
 
 <body onload='start()'>
   <h1> Images </h1>
-  <button id='addButton' onclick='addNew()'> Add </button>
+  <input id='uploadButton' type="file" onchange='uploadNew()'>
+  <button id='addButton' onclick='addNew()'> Add using URL </button>
   <ol id='todoListWrapper'> </ol>
   <div id='theDetails'> 
     <h1 id='theTitle'></h1>
