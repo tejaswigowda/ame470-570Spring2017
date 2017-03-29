@@ -16,7 +16,7 @@
       <section class="copy">
         <div class="figure-wrapper">
           <figure class="image-container target">
-            <img crossorigin='anonymous' src="https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png" alt="" id="target">
+            <img crossorigin='anonymous' src="" alt="" id="target">
 
             <figcaption id='caption' class="image-meta">
             </figcaption>
@@ -32,6 +32,9 @@
   <script src="./build/darkroom.js"></script>
 
   <script>
+    document.getElementById("target").src = window.location.hash.replace("#","");
+    //"https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png";
+
     var dkrm = new Darkroom('#target', {
       // Size options
       minWidth: 100,
