@@ -32,8 +32,9 @@
   <script src="./build/darkroom.js"></script>
 
   <script>
+
+    // get image to be edited from hash of the URL
     document.getElementById("target").src = window.location.hash.replace("#","");
-    //"https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png";
 
     var dkrm = new Darkroom('#target', {
       // Size options

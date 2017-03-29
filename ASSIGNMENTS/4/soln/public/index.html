@@ -5,6 +5,11 @@
   <script src='asyncReq.js'> </script>
   <script src='https://code.jquery.com/jquery-3.2.0.min.js'> </script>
   <script>
+    function editImage(){
+      var url = document.getElementById("theImage").style.backgroundImage.replace('url("', "").replace('")','');
+      window.open("./demo/index.html#" + url);
+    }
+
     function addNew(){
       var imageURL = prompt("Enter New Image URL:");
       var id = new Date().getTime();
