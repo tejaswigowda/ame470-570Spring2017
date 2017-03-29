@@ -6,7 +6,7 @@
   <script src='https://code.jquery.com/jquery-3.2.0.min.js'> </script>
   <script>
     function editImage(){
-      var url = document.getElementById("theImage").style.backgroundImage.replace('url("', "").replace('")','');
+      var url = document.getElementById("theImage").style.backgroundImage.replace('url(', "").replace(')','').replace('"','').replace("'", "");
       window.open("./demo/index.html#" + url);
     }
 
