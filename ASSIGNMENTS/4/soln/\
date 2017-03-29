@@ -6,11 +6,8 @@
   <script src='https://code.jquery.com/jquery-3.2.0.min.js'> </script>
   <script>
     function editImage(){
-      var url = document.getElementById("theImage").style.backgroundImage.replace('url("', "").replace('")','').replace("url('", "").replace("')",'');
-      console.log(url);
-      console.log(url);
+      var url = document.getElementById("theImage").style.backgroundImage.replace('url(', "").replace(')','').replace('"','').replace("'", "");
       document.getElementById("DRFrame").src = "./demo/index.html#" + url;
-      document.getElementById("editWrapper").style.display = "block";
     }
 
     function addNew(){
@@ -114,20 +111,10 @@
 
       #editWrapper{
         display: none;
+        position: fixed;
+        height: 100%;
+        width: 100%;
         background: rgba(0,0,0,.5);
-        position: fixed;
-        height: 100%;
-        width: 100%;
-        top: 0px;
-        left: 0px;
-      }
-
-      #DRFrame{
-        position: fixed;
-        height: 100%;
-        width: 100%;
-        top: 0px;
-        left: 0px;
       }
 
   </style>
@@ -150,7 +137,7 @@
 
 
   <div id='editWrapper'> 
-    <iframe crossorigin='anonymous'  id='DRFrame'> </iframe>
+    <iframe id='DRFrame'> </iframe>
   </div>
 </body>
 
