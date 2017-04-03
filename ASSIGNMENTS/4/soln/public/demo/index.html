@@ -37,8 +37,9 @@
     document.getElementById("target").src = window.location.hash.replace("#","");
     
     setTimeout("initDR()", 5000);
+    var dkrm;
     function initDR(){
-      var dkrm = new Darkroom('#target', {
+      dkrm = new Darkroom('#target', {
         // Size options
         minWidth: 100,
         minHeight: 100,
@@ -49,7 +50,7 @@
 
         // Plugins options
         plugins: {
-          //save: false,
+          save: false,
           crop: {
             quickCropKey: 67, //key "c"
             //minHeight: 50,
@@ -60,9 +61,13 @@
 
         // Post initialize script
         initialize: function() {
-          var cropPlugin = this.plugins['crop'];
+          //var cropPlugin = this.plugins['crop'];
           // cropPlugin.selectZone(170, 25, 300, 300);
-          cropPlugin.requireFocus();
+          //cropPlugin.requireFocus();
+          this.addEventListener('core:transformation', function() {  
+            sessionStorage.setItem("editedImage", dkrm.canvas.toDataURL())
+          });
+
         }
       });
     }
