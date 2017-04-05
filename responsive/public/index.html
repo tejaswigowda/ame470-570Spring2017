@@ -138,8 +138,8 @@
         background: gold;
       }
       .selected{
-        color: red;
         text-transform: uppercase;
+        color: red;
       }
       h1{
         text-align: center;
@@ -189,6 +189,26 @@
         width: 100%;
         top: 0px;
         left: 0px;
+      }
+
+      @media (max-width: 400px){ /* small screens */ 
+        #todoListWrapper,
+        #theDetails{
+          width: 100%;
+        } 
+      }
+      @media (min-width: 400px){ /* bigger screens */ 
+        #todoListWrapper{
+          width: 30%;
+        } 
+        #theDetails{
+          width: 70%;
+          float: right;
+        }
+      }
+
+      #todoListWrapper{
+        background: lightgray;
       }
 
   </style>
