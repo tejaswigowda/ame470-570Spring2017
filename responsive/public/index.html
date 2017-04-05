@@ -114,7 +114,12 @@
         android = false;
         mouse = true;
       }
-
+      if(mouse){
+        $("body").addClass("mouse");
+      }
+      else{
+        $("body").addClass("touch");
+      }
     }
 
     function start()
@@ -128,6 +133,10 @@
     }
   </script>
   <style>
+      .mouse #todoListWrapper li:hover,
+      .touch #todoListWrapper li:active{
+        background: gold;
+      }
       .selected{
         color: red;
         text-transform: uppercase;
