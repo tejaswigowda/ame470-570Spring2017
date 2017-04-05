@@ -85,6 +85,36 @@
 
     function parseUA()
     {
+      var ua = navigator.userAgent.toLowerCase();
+      if(ua.indexOf("iphone") >= 0){
+        ios = true;
+        iphone = true;
+        touch = true;
+        android = false;
+        mouse = false;
+      }
+      else if(ua.indexOf("ipad") >= 0){
+        ios = true;
+        iphone = false;
+        touch = true;
+        android = false;
+        mouse = false;
+      }
+      else if(ua.indexOf("android") >= 0){
+        ios = false;
+        iphone = false;
+        touch = true;
+        android = true;
+        mouse = false;
+      }
+      else{
+        ios = false;
+        iphone = false;
+        touch = false;
+        android = false;
+        mouse = true;
+      }
+
     }
 
     function start()
