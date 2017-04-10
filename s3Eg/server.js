@@ -39,7 +39,7 @@ app.post('/uploadFile', function(req, res){
         
         fs.readFile(tmpPath, function (err, data) {
             var params = {
-                Bucket:'ame470',
+                Bucket:'ame470s2017tg',
                 ACL:'public-read',
                 Key:intname,
                 Body: data,
