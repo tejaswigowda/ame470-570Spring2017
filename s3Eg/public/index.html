@@ -1,44 +1,36 @@
 <html>
-
 <head>
-<script src='https://code.jquery.com/jquery-3.2.0.min.js'> </script>
+<script src='jquery-2.2.1.min.js'> </script>
 <script>
-function fileUploaded()
+var fileUploaded = function()
 {
-  var fd = new FormData();
-  var filename = $('#fileUpload').get(0).files[0].name;
-  var size = $('#fileUpload').get(0).files[0].size;
-  fd.append('date', (new Date()).toString());
-  fd.append('input', $('#fileUpload').get(0).files[0]);
-  var ext = filename.split(".")[1];
-  if(['png','jpg','jpeg','bmp','gif'].indexOf(ext) < 0){
-    alert("only images");
-    return;
-  }
-  if(size > 20000000){
-    alertHandler.flashNewMessage("File too large", "please ensure your file is under 20 Mb...");
-    return;
-  }
+   var file = $('#theFileUploader').get(0);
+   var fileObj = $('#theFileUploader').get(0).files[0]
+   var filename = fileObj.name;
+   var ext = filename.split(".");
+   ext = ext[ext.length-1];
+   console.log(ext);
 
-  var theid = new Date().getTime().toString();
-  var fileInput = theid + ext;
-  fd.append('fileInput', fileInput);
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function(e) {
-    if (xhr.readyState != 4) { return; }
-    getElementObject("fileUpload").value = "";
-  };
-  xhr.open("POST", "/uploadFile", true);
-  xhr.send(fd);
+   var fd = new FormData();
+   var fileInput = "s3Upload_" + new Date().getTime().toString() + "." + ext;
+   fd.append('fileInput', fileInput);
+   fd.append('input', file.files[0]);
+   fd.append('date', (new Date()).toString());
+
+    //fd.append('data', data);
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(e) {  
+      if (xhr.readyState != 4) { return; }
+      // callback logic
+      alert("done");
+    };
+    xhr.open("POST", "/uploadFile", true);
+    xhr.send(fd);
 }
 </script>
 </head>
 
 <body>
-
-<input id='fileUpload' type='file' onchange='fileUploaded()'> 
+  <input type='file' id='theFileUploader' onchange='fileUploaded()'> 
 </body>
-
 </html>
-
-
