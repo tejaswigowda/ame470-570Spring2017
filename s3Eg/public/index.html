@@ -28,12 +28,88 @@ var fileUploaded = function()
     xhr.open("POST", "/uploadFile", true);
     xhr.send(fd);
 }
+    function cancelImageEdit()
+    {
+      document.getElementById("DRFrame").src = "";
+      document.getElementById("editWrapper").style.display = "none";
+    }
+
+    function editImage(){
+      var url = document.getElementById("preview").src;
+      document.getElementById("DRFrame").src = "./demo/index.html#" + url;
+      document.getElementById("editWrapper").style.display = "block";
+    }
+
+
 </script>
+  <style>
+      .selected{
+        color: red;
+        text-transform: uppercase;
+      }
+      h1{
+        text-align: center;
+      }
+      #addButton
+      {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      #uploadButton
+      {
+        position: absolute;
+        top: 20px;
+        right: 120px;
+      }
+      .delButton
+      {
+          float: right;
+      }      
+      #theImage{
+        height: 200px;
+        width: 100%;
+        background-size: contain;
+        background-position: 50%;
+        background-repeat: no-repeat;
+      }
+
+      #editWrapper{
+        display: none;
+        background: rgba(0,0,0,.7);
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        top: 0px;
+        left: 0px;
+      }
+
+      #editWrapper button{
+        position: fixed;
+        float: right;
+      }
+
+      #DRFrame{
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        top: 0px;
+        left: 0px;
+      }
+
+  </style>
 </head>
 
 <body>
   <input type='file' id='theFileUploader' onchange='fileUploaded()'> 
   <img style='height: 200px;display: block;width: auto;' id='preview'> 
   <button onclick='editImage()'> Edit </button>
+
+  <div id='editWrapper'> 
+    <iframe crossorigin='anonymous'  id='DRFrame'> </iframe>
+    <button style='right:0px' onclick='saveImageEdit()'> Save </button>
+    <button onclick='cancelImageEdit()'> Cancel </button>
+  </div>
+
 </body>
 </html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DarkroomJS</title>
+  <link rel="stylesheet" href="./build/darkroom.css">
+  <link rel="stylesheet" href="./css/page.css">
+  <style>
+    body, html{
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+<!--
+  <header id="header">
+  </header>
+  -->
+  <div id="content">
+    <div class="container">
+      <section class="copy">
+        <div class="figure-wrapper">
+          <figure class="image-container target">
+            <img crossorigin='anonymous' src="" alt="" id="target">
+
+            <figcaption id='caption' class="image-meta">
+            </figcaption>
+          </figure>
+        </div>
+
+
+      </section>
+    </div>
+  </div>
+
+  <script src="./vendor/fabric.js"></script>
+  <script src="./build/darkroom.js"></script>
+
+  <script>
+
+    // get image to be edited from hash of the URL
+    document.getElementById("target").src = window.location.hash.replace("#","");
+    
+    setTimeout("initDR()", 5000);
+    var dkrm;
+    function initDR(){
+      dkrm = new Darkroom('#target', {
+        // Size options
+        minWidth: 100,
+        minHeight: 100,
+        maxWidth: 600,
+        maxHeight: 500,
+        ratio: 4/3,
+        backgroundColor: '#000',
+
+        // Plugins options
+        plugins: {
+          save: false,
+          crop: {
+            quickCropKey: 67, //key "c"
+            //minHeight: 50,
+            //minWidth: 50,
+            //ratio: 4/3
+          }
+        },
+
+        // Post initialize script
+        initialize: function() {
+          //var cropPlugin = this.plugins['crop'];
+          // cropPlugin.selectZone(170, 25, 300, 300);
+          //cropPlugin.requireFocus();
+          this.addEventListener('core:transformation', function() {  
+            sessionStorage.setItem("editedImage", dkrm.canvas.toDataURL())
+          });
+
+        }
+      });
+    }
+  </script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-23657373-2', 'mattketmo.github.io');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>
