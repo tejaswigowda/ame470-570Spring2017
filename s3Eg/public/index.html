@@ -21,7 +21,8 @@ var fileUploaded = function()
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(e) {  
       if (xhr.readyState != 4) { return; }
-      // callback logic
+        // callback logic
+       document.getElementById("preview").src = "https://s3-us-west-2.amazonaws.com/ame470s2017tg/" + fileInput;
       alert("done");
     };
     xhr.open("POST", "/uploadFile", true);
