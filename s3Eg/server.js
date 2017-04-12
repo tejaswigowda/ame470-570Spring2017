@@ -29,7 +29,7 @@ app.get("/", function (req, res) {
       res.redirect("/index.html");
 });
 
-  app.post('/uploadImage', isLoggedIn, function(req, res){
+  app.post('/uploadImage', function(req, res){
         var intname = req.body.fileInput;
         var s3Path = '/' + intname;
         var buf = new Buffer(req.body.data.replace(/^data:image\/\w+;base64,/, ""),'base64')
