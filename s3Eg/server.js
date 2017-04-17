@@ -29,45 +29,43 @@ app.get("/", function (req, res) {
       res.redirect("/index.html");
 });
 
-  app.post('/uploadImage', function(req, res){
-        var intname = req.body.fileInput;
-        var s3Path = '/' + intname;
-        var buf = new Buffer(req.body.data.replace(/^data:image\/\w+;base64,/, ""),'base64')
+app.post('/uploadImage', function(req, res){
+    var intname = req.body.fileInput;
+    var s3Path = '/' + intname;
+    var buf = new Buffer(req.body.data.replace(/^data:image\/\w+;base64,/, ""),'base64');
+    var params = {
+        Bucket:'ame470s2017tg',
+        ACL:'public-read',
+        Key:intname,
+        Body: buf,
+        ServerSideEncryption : 'AES256'
+    };
+    s3.putObject(params, function(err, data) {
+        console.log(err);
+        res.end("success");
+    });
+});
+
+app.post('/uploadFile', function(req, res){
+    var intname = req.body.fileInput;
+    var filename = req.files.input.name;
+    var fileType =  req.files.input.type;
+    var tmpPath = req.files.input.path;
+    var s3Path = '/' + intname;
+    
+    fs.readFile(tmpPath, function (err, data) {
         var params = {
-            Bucket:'alldone',
+            Bucket:'ame470s2017tg',
             ACL:'public-read',
             Key:intname,
-            Body: buf,
+            Body: data,
             ServerSideEncryption : 'AES256'
         };
         s3.putObject(params, function(err, data) {
-            console.log(err);
             res.end("success");
+            console.log(err);
         });
-  });
-
-
-app.post('/uploadFile', function(req, res){
-      console.log(req.body);
-        var intname = req.body.fileInput;
-        var filename = req.files.input.name;
-        var fileType =  req.files.input.type;
-        var tmpPath = req.files.input.path;
-        var s3Path = '/' + intname;
-        
-        fs.readFile(tmpPath, function (err, data) {
-            var params = {
-                Bucket:'ame470s2017tg',
-                ACL:'public-read',
-                Key:intname,
-                Body: data,
-                ServerSideEncryption : 'AES256'
-            };
-            s3.putObject(params, function(err, data) {
-                res.end("success");
-                console.log(err);
-            });
-        });
+    });
   });
 
 
