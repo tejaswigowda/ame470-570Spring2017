@@ -1,0 +1,79 @@
+<html>
+<head>
+<title>
+  Image Filter
+</title>
+<style>
+  #imagePreview{
+      display: block;
+  }
+</style>
+<script src='http://cdnjs.cloudflare.com/ajax/libs/camanjs/4.0.0/caman.full.min.js'>
+</script>
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+
+<script>
+var MAX_WIDTH = 500;
+var MAX_HEIGHT = 500;
+var imageUploaded = function()
+{
+   var file = $('#uploadImage').get(0);
+   console.log(file.files[0].type);
+   if(file.files[0].type.split("/")[0].toLowerCase() != "image"){
+        alert("Incorrect file type -- Please ensure you are uploading an image file.");
+        return;
+   }
+   if ( file.files && file.files[0] && file.files[0].type.split("/")[0].toLowerCase() === "image") {
+        var FR = new FileReader();
+        FR.onload = function(e) {
+            var data = e.target.result;
+            console.log(data);
+            var canvas = document.createElement("canvas");
+            var img = document.createElement("img");
+            img.onload= function(){
+                var width = img.width;
+                var height = img.height;
+                
+                canvas.width = width;
+                canvas.height = height;
+                var ctx = canvas.getContext("2d");
+                ctx.filter = document.getElementById("canFilter").value;//'sepia(100%)';
+                ctx.drawImage(img, 0, 0, width, height);
+                var base64St = canvas.toDataURL("image/png");
+                document.getElementById("imagePreview").src = base64St;
+                document.getElementById("imagePreview").style.height = height + "px";
+                document.getElementById("imagePreview").style.width= height + "px";
+            }
+            img.src = data;
+        };  
+        FR.readAsDataURL( file.files[0] );
+   }
+}
+
+function presetSelected()
+{
+  document.getElementById('canFilter').value = document.getElementById('filterPresets').value;
+  imageUploaded();
+}
+</script>
+
+</head>
+
+<body>
+  <input type="file" name="uploadImage" id="uploadImage" onchange="imageUploaded()">
+  <select onchange='presetSelected()' id='filterPresets'>
+    <option value='sepia(100%)'> Sepia </option>
+    <option value='invert(100%)'> Invert </option>
+    <option value='sepia(100%) grayscale(50%) blur(50%)'> My first filter </option>
+    <option value='saturate(100%) opacity(50%)'> Vintage </option>
+    <option value=''> Custom </option>
+  </select>
+  <input type='text' id='canFilter' onchange='imageUploaded()'>
+  <img id="imagePreview">
+</body>
+
+
+</html>
