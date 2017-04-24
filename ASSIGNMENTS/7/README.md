@@ -4,8 +4,9 @@
 
 You integrated [Darkroom.js](https://github.com/MattKetmo/darkroomjs), in Assignment 6.
 Now add
-[filters](/Users/tejaswi/Downloads/ame2200Spring2017/canvas-filters) to
-it. Each option should be a range slider (0% to 100%).
+[filters](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter)
+to it. Each option should be a range slider (0% to 100%).
+
 
 ## Submisssion
 
