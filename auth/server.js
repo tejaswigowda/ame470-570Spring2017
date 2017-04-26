@@ -34,7 +34,7 @@ app.get("/addtodo", function (req, res) {
  			res.end("done");
  		}
  	}
-	
+
 	db.collection(req.query.colletion).findOne({id: x.id}, function(err, result1) {
 		if(result1){
 			console.log(result1);
@@ -45,11 +45,11 @@ app.get("/addtodo", function (req, res) {
 			db.collection(req.query.collection).insert(x, callback);
 		}
 	});
-	
+
   });
 
-  
-  
+
+
 
 app.get("/deletephoto", function (req, res) {
 	var index = req.query.index;
@@ -69,7 +69,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 var expressSession = require('express-session');
-var cookieParser = require('cookie-parser'); 
+var cookieParser = require('cookie-parser');
 app.use(cookieParser('thereisnospoon'));
 app.use(expressSession());
 
@@ -103,7 +103,7 @@ app.post('/uploadFile', function(req, res){
 
      var tmpPath = req.files.input.path;
      var s3Path = '/' + intname;
-                            
+
      fs.readFile(tmpPath, function (err, data) {
          var params = {
              Bucket:'ameweb',
@@ -113,10 +113,10 @@ app.post('/uploadFile', function(req, res){
          };
          s3.putObject(params, function(err1, data) {});
 		 });
-     
+
 });
 
-	
+
 app.get('/logout', function(req, res){
     // destroy the user's session to log them out
     req.session.destroy(function(){
@@ -126,7 +126,7 @@ app.get('/logout', function(req, res){
 
 
 app.get('/login', function(req, res){
-        auth.authenticate(req.query.userID, req.query.password,'users', 'user', db, function(err, user){
+        auth.authenticate(req.query.userID, req.query.password, db, function(err, user){
             if (user) {
                 // Regenerate session when signing in
                 req.session.regenerate(function(){
@@ -144,8 +144,8 @@ app.get('/login', function(req, res){
 });
 
 app.get('/getUser', function(req, res){
-	auth.restrict(req, res, db, ['user'], function(ret){	
-			if(ret){		
+	auth.restrict(req, res, db, ['user'], function(ret){
+			if(ret){
 					db.collection("users").findOne({userID: info.userID}, function(err, result) {
 					if(result) {
                             //res.writeHead(200, "OK", {'Content-Type': 'text/plain'});
@@ -167,7 +167,7 @@ app.get('/getUser', function(req, res){
 
 app.get('/createUser', function(req, res){
 				db.collection("users").findOne({userID:req.query.userID}, function(err, result) {
-						if(result) { 
+						if(result) {
 							res.send('0');
 						} else {
 							db.collection("users").insert(req.query, function(err, result) {
