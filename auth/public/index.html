@@ -1,0 +1,273 @@
+<html>
+<head>
+	<style>
+	
+	</style>
+	
+	<script src="md5.js"></script>
+	
+	<script>
+	
+	function login(){
+		var email = document.getElementById("username").value;
+		var pw = hex_md5(document.getElementById("password").value);	
+		
+		var url = "./login";
+		url = url + "?userID=" + email;
+		url = url + "&password=" + pw;
+		url = url + "&userType=user";
+		url = url + "&collection=users";
+		loadURL(url, function(data){
+			if(data === "1"){
+				document.getElementById("postlogin").style.display = "block";
+				document.getElementById("prelogin").style.display = "none";
+				userID = email;
+				updateList(); 
+			}
+			else{
+				alert("Login failed! Try again later");
+			}
+		});
+	}
+	
+	
+	function register()
+	{
+		var name = document.getElementById("nameReg").value;
+		var email = document.getElementById("usernameReg").value;
+		var pw1 = document.getElementById("passwordReg").value;
+		var pw2 = document.getElementById("passwordReg1").value;
+		
+		if(pw1 != pw2){
+			alert('passwords do not match!');
+			return;
+		}
+		
+		var url = "./createUser";
+		url = url + "?name=" + name;
+		url = url + "&userID=" + email;
+		url = url + "&password=" + hex_md5(pw1);
+		url = url + "&userType=user";
+		url = url + "&collection=users";
+		
+		loadURL(url, function(data){
+			if(data === "1"){
+				alert("account created!")
+			}
+			else{
+				alert("something went wrong! Try again later");				
+			}
+		});		 
+	}
+	
+	/*
+	This method uses a couple different methods of instantiating the
+	XMLHttpRequest object. The reason we do this is so we can support
+	multiple browser (I've only tested in IE and Firefox).
+	*/
+	function getXMLHTTPRequest()
+	{
+	    var request;
+    
+	    // Lets try using ActiveX to instantiate the XMLHttpRequest object
+	    try{
+	        request = new ActiveXObject("Microsoft.XMLHTTP");
+	    }catch(ex1){
+	        try{
+	            request = new ActiveXObject("Msxml2.XMLHTTP");
+	        }catch(ex2){
+	            request = null;
+	        }
+	    }
+
+	    // If the previous didn't work, lets check if the browser natively support XMLHttpRequest 
+	    if(!request && typeof XMLHttpRequest != "undefined"){
+	        //The browser does, so lets instantiate the object
+	        request = new XMLHttpRequest();
+	    }
+
+	    return request;
+	}
+	
+	
+   function loadURL(url, callback)
+   {
+       var aXMLHttpRequest = getXMLHTTPRequest();
+       var allData;
+
+       if (aXMLHttpRequest){
+           aXMLHttpRequest.open("GET", url, true);
+           aXMLHttpRequest.onreadystatechange = function (aEvt) {
+   				if(aXMLHttpRequest.readyState == 4){
+ 				   allData = aXMLHttpRequest.responseText;
+				   callback(allData)
+			   }
+
+        };
+     
+        //Lets fire off the request
+           aXMLHttpRequest.send(null);
+       }
+
+       else
+       {
+           //Oh no, the XMLHttpRequest object couldn't be instantiated.
+           alert("A problem occurred instantiating the XMLHttpRequest object.");
+       }
+   }
+	
+	
+var userID = "";
+
+	function addNew()
+	{
+      var fileObj = document.getElementById('fileUpload').files[0];
+      var filename = fileObj.name;
+      var size = fileObj.size;
+      
+
+      var t = filename.substring(filename.length-3, filename.length).toLowerCase();
+      if(['png', 'jpg', 'gif'].indexOf(t) == -1){
+          alert("Incorrect File -- Please upload an image"); 
+          document.getElementById("fileUpload").value = ""; 
+          return;
+      }
+
+
+      var fd = new FormData();
+      var fileInput = userID + new Date().getTime().toString() + "." + t;
+
+      fd.append('date', (new Date()).toString());
+      fd.append('input', fileObj);
+      fd.append('fileInput', fileInput);
+      fd.append('collection', userID);
+	  
+	  var fordb = {
+		  id: "photo" + new Date().getTime().toString(),
+		  name: "Untitled",
+		  url: "https://s3.amazonaws.com/ameweb/" + fileInput
+	  }
+	  
+      fd.append('fordb', encodeURIComponent(JSON.stringify(fordb)));
+	  
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+          document.getElementById("fileUpload").value = "";
+          if (xhr.readyState != 4) { return; }
+		  updateList();
+      };
+      xhr.open("POST", "/uploadFile", true);
+      xhr.send(fd); 
+}
+
+
+   
+   var allPhotos;
+   function updateList()
+   {
+	   var url = "./listphotos";
+	   url = url + "?collection=" + userID;
+	   	 
+	   var callback = function(data){
+		   var list = JSON.parse(data);
+		   allPhotos = list;
+		   var output = "";
+		   for(var i=0; i < list.length; i++){
+			   output = output + "<p>" + list[i].name + "</p>";
+			   output = output + "<a href='" + list[i].url + "' target='_blank'>" + "View</a>";
+			   output = output + "<a href='javascript:renamePhoto(" + i + ")'>" + "Rename</a>";
+			   output = output + "<a href='javascript:deletePhoto(" + i + ")'>" + "Delete</a>";
+			   output = output + "<hr>";
+		   }
+		   document.getElementById("list").innerHTML = output;
+	   }  
+	   loadURL(url, callback);  
+   	
+   }
+   
+   function deletePhoto(i){
+	   id = allPhotos[i];
+	   var url = "./deletephoto?index=" + encodeURIComponent(index);
+	   url = url + "&collection=" + userID;
+	   var callback = function(data){
+		   if(data === "deleted"){
+			   updateList();
+		   }
+	   } 
+	   loadURL(url, callback); 
+   }
+   
+   function renamePhoto(i){
+	   var id = allPhotos[i].id;	   
+	   var newname = prompt("Rename photo", getPhotoName(id))
+	   
+	   var url = "./renamephoto?id=" + encodeURIComponent(id) 
+	   					+ "&name=" + encodeURIComponent(newname)
+						+ "&collection=" + userID;
+						
+	   
+	   
+	   var callback = function(data){
+		   if(data === "done"){
+			   updateList();
+		   }
+	   } 
+	   loadURL(url, callback); 
+   }
+   
+   function getPhotoName(id)
+   {
+	   for(var i = 0; i < allPhotos.length; i++){
+		   if(allPhotos[i].id === id){
+			   return allPhotos[i].name;
+		   }
+	   }
+	   return "";
+   }
+   
+	</script>
+	
+</head>
+<body onload='updateList()'>
+	<div style='display:none' id='postlogin'>
+		<h1> Photo Uploader </h1>
+		<div id="logindetails"> </div>
+     	<input type='file' id='fileUpload' onchange='addNew()'>
+		<hr>
+		<div id="list">
+			list is empty
+		</div>
+	</div>
+	<div id='prelogin'>
+		<div class='box'>
+			<h1> Sign in </h1>
+			
+			<label for='username'> Username </label>
+	    	<input type='email' id='username' >
+			
+			<label for='password'> Password </label>
+	    	<input type='password' id='password' >
+			
+			<a href='javascript:login()'> Log in </a>
+		</div>
+		
+		<div class='box'>
+			<h1> Register </h1>
+			<label for='nameReg'> Full name  </label>
+	    	<input type='text' id='nameReg' >
+			
+			<label for='usernameReg'> Email (used as username) </label>
+	    	<input type='email' id='usernameReg' >
+			
+			<label for='passwordReg'> Password </label>
+	    	<input type='password' id='passwordReg' >
+			
+			<label for='passwordReg1'> Retype Password </label>
+	    	<input type='password' id='passwordReg1' >
+			
+			<a href='javascript:register()'> Register </a>
+		</div>
+	</div>
+</body>
+
+</html>
