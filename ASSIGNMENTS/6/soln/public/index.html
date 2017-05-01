@@ -61,7 +61,7 @@ function saveImageEdit(){
     }
 
     function editImage(){
-      var url = document.getElementById("theImage").style.backgroundImage.replace('url("', "").replace('")','').replace("url('", "").replace("')",'').replace("url(","").replace(")","");
+      var url = document.getElementById("theImage").style.backgroundImage.replace('url("', "").replace('")','').replace("url('", "").replace("')",'').replace("url(","").replace(")","").split("?")[0];
       console.log(url);
       console.log(url);
       document.getElementById("DRFrame").src = "./demo/index.html#" + url;
