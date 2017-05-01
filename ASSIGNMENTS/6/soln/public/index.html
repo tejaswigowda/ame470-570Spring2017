@@ -49,6 +49,9 @@ function saveImageEdit(){
       xhr.open("POST", "/uploadImage", true);
       xhr.send(fd);
   }
+  else{
+    cancelImageEdit();
+  }
 }
 
     function cancelImageEdit()
