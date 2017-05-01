@@ -1,0 +1,234 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width, maximum-scale=1.0">
+  <script src='asyncReq.js'> </script>
+  <script src='https://code.jquery.com/jquery-3.2.0.min.js'> </script>
+  <script>
+var uploadNew = function()
+{
+   var file = $('#uploadButton').get(0);
+   var fileObj = $('#uploadButton').get(0).files[0]
+   var filename = fileObj.name;
+   var ext = filename.split(".");
+   ext = ext[ext.length-1];
+   console.log(ext);
+   var fd = new FormData();
+   var fileInput = "s3Upload_" + new Date().getTime().toString() + "." + ext;
+   fd.append('fileInput', fileInput);
+   fd.append('input', file.files[0]);
+   fd.append('date', (new Date()).toString());
+    //fd.append('data', data);
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(e) {  
+      if (xhr.readyState != 4) { return; }
+        // callback logic
+      addNew("https://s3-us-west-2.amazonaws.com/ame470s2017tg/" + fileInput)
+    };
+    xhr.open("POST", "/uploadFile", true);
+    xhr.send(fd);
+}
+function saveImageEdit(){
+  if(sessionStorage.getItem("isEdited") == "true"){
+     var fd = new FormData();
+     var fileInput = document.getElementById("theImage").style.backgroundImage.replace('url("', "").replace('")','').replace("url('","").replace("')","").replace("url(","").replace(")","").split("/ame470s2017tg/")[1].split("?")[0];;
+    
+    console.log(fileInput);
+    
+     fd.append('fileInput', fileInput);
+     fd.append('date', (new Date()).toString());
+     fd.append('data', sessionStorage.getItem("editedImage"));
+      //fd.append('data', data);
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function(e) {  
+        cancelImageEdit();
+        if (xhr.readyState != 4) { return; }
+          // callback logic
+        start(); 
+      };
+      xhr.open("POST", "/uploadImage", true);
+      xhr.send(fd);
+  }
+}
+
+    function cancelImageEdit()
+    {
+      document.getElementById("DRFrame").src = "";
+      document.getElementById("editWrapper").style.display = "none";
+      if(sessionStorage.getItem("isEdited")  === "true"){
+      }
+          
+    }
+
+    function editImage(){
+      var url = document.getElementById("theImage").style.backgroundImage.replace('url("', "").replace('")','').replace("url('", "").replace("')",'');
+      console.log(url);
+      console.log(url);
+      document.getElementById("DRFrame").src = "./demo/index.html#" + url;
+      document.getElementById("editWrapper").style.display = "block";
+    }
+
+    function addNew(imageURL){
+      var id = new Date().getTime();
+      if(imageURL.indexOf("http") >=0 && imageURL.length > 10){
+        var url = "./addTodo" + "?id=" + id + "&url=" + imageURL + "&name=Untitled";
+        loadFile(url ,function(d){
+          formatTodos(JSON.parse(d));
+        });
+      }
+    }
+
+    function deleteImage()
+    {
+       deleteTodo(currSel);
+    }
+
+    function renameImage(){
+        var url = "./getTodo?id=" + currSel;
+        loadFile(url ,function(d){
+          var data = JSON.parse(d);
+          var flag = prompt("Rename Image", data.name);
+          if(flag){
+            var url = "./renameTodo" + "?id=" + currSel + "&name=" + flag;
+            loadFile(url ,function(d){
+              formatTodos(JSON.parse(d));
+            });
+          }
+        });
+
+    }
+
+
+    function deleteTodo(index){
+      var flag = confirm("Are you sure you want to delete?");
+
+      if(flag){
+        var url = "./deleteTodo" + "?id=" + index;
+        loadFile(url ,function(d){
+          formatTodos(JSON.parse(d));
+        });
+      }
+    }
+
+
+    function formatTodos(list)
+    {
+      var markup = "";
+      if(list.length == 0){
+        markup = "No images yet"
+        document.getElementById("todoListWrapper").innerHTML = markup;
+        return;
+      }
+      for(var i = 0; i < list.length; i++){
+        markup += "<li> <a href='javascript:imageSelected(" + list[i].id + "," + (i+1) + ")'>" + list[i].name +
+            "</a></li>"; 
+      }
+      document.getElementById("todoListWrapper").innerHTML = markup;
+      imageSelected(list[0].id);
+    }
+
+    var currSel = 0;
+    function imageSelected(id, index){
+        currSel = id;
+        $("#todoListWrapper li a").removeClass("selected");
+        $("#todoListWrapper li:nth-of-type(" + index + ") a").addClass("selected");
+
+        var url = "./getTodo?id=" + id;
+        loadFile(url ,function(d){
+          var data = JSON.parse(d);
+          document.getElementById("theTitle").innerHTML = data.name;
+          document.getElementById("theImage").style.backgroundImage = "url(" + data.url + "?=t=" + new Date().getTime() + ")";
+        });
+    }
+
+    function start()
+    {
+      var url = "./getTodos";
+      loadFile(url ,function(d){
+        console.log(d);
+        formatTodos(JSON.parse(d));
+      })
+    }
+  </script>
+  <style>
+      .selected{
+        color: red;
+        text-transform: uppercase;
+      }
+      h1{
+        text-align: center;
+      }
+      #addButton
+      {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      #uploadButton
+      {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+      }
+      .delButton
+      {
+          float: right;
+      }      
+      #theImage{
+        height: 200px;
+        width: 100%;
+        background-size: contain;
+        background-position: 50%;
+        background-repeat: no-repeat;
+      }
+
+      #editWrapper{
+        display: none;
+        background: rgba(0,0,0,.7);
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        top: 0px;
+        left: 0px;
+      }
+
+      #editWrapper button{
+        position: fixed;
+        float: right;
+      }
+
+      #DRFrame{
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        top: 0px;
+        left: 0px;
+      }
+
+  </style>
+</head>
+
+<body onload='start()'>
+  <h1> Images </h1>
+  <!-- <button id='addButton' onclick='addNew()'> Add using URL </button> -->
+  <input id='uploadButton' type="file" onchange='uploadNew()'>
+  <ol id='todoListWrapper'> </ol>
+  <div id='theDetails'> 
+    <h1 id='theTitle'></h1>
+    <div id='theImage'></div>
+
+    <button onclick='deleteImage()'> Delete </button>
+    <button onclick='renameImage()'> Rename </button>
+    <button onclick='editImage()'> Edit </button>
+
+  </div>
+
+
+  <div id='editWrapper'> 
+    <iframe crossorigin='anonymous'  id='DRFrame'> </iframe>
+    <button style='right:0px' onclick='saveImageEdit()'> Save </button>
+    <button onclick='cancelImageEdit()'> Cancel </button>
+  </div>
+</body>
+
+</html>
